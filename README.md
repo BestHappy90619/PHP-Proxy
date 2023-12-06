@@ -1,35 +1,25 @@
-<center>
-
-![](https://img.shields.io/packagist/dm/athlon1600/php-proxy) ![](https://img.shields.io/github/last-commit/athlon1600/php-proxy)
-
-</center>
-
-php-proxy
-=========
+# php-proxy
 
 Proxy script built on PHP, Symfony and cURL.
 This library borrows ideas from Glype, Jenssegers proxy, and Guzzle.
 
-PHP-Proxy Web Application
--------
+## PHP-Proxy Web Application
 
 If you're looking for a **project** version of this script that functions as a Web Application similar to Glype, then visit
-[**php-proxy-app**](https://github.com/Athlon1600/php-proxy-app)
+[**php-proxy-app**](https://github.com/BestHappy90619/PHP-Proxy)
 
 See this php-proxy in action:
 <a href="https://proxy.unblockvideos.com/" target="_blank">proxy.unblockvideos.com</a>
 
-Installation
--------
+## Installation
 
 Install it using [Composer](http://getcomposer.org):
 
 ```bash
-composer require athlon1600/php-proxy
+composer require BestHappy90619/PHP-Proxy
 ```
 
-Example
---------
+## Example
 
 ```php
 require('vendor/autoload.php');
@@ -44,7 +34,7 @@ $proxy = new Proxy();
 $proxy->getEventDispatcher()->addListener('request.before_send', function($event){
 
 	$event['request']->headers->set('X-Forwarded-For', 'php-proxy');
-	
+
 });
 
 $proxy->getEventDispatcher()->addListener('request.sent', function($event){
@@ -52,16 +42,16 @@ $proxy->getEventDispatcher()->addListener('request.sent', function($event){
 	if($event['response']->getStatusCode() != 200){
 		die("Bad status code!");
 	}
-  
+
 });
 
 $proxy->getEventDispatcher()->addListener('request.complete', function($event){
 
 	$content = $event['response']->getContent();
 	$content .= '<!-- via php-proxy -->';
-	
+
 	$event['response']->setContent($content);
-	
+
 });
 
 $response = $proxy->forward($request, "http://www.yahoo.com");
@@ -71,8 +61,7 @@ $response->send();
 
 ```
 
-Plugin Example
---------
+## Plugin Example
 
 ```php
 namespace Proxy\Plugin;
@@ -88,18 +77,18 @@ class MultiSiteMatchPlugin extends AbstractPlugin {
 	protected $url_pattern = '/^abc\.(com|de|pl)$/is';
 	// Matches a single domain name
 	//protected $url_pattern = 'abc.com';
-	
+
 	public function onCompleted(ProxyEvent $event){
-	
+
 		$response = $event['response'];
-		
+
 		$html = $response->getContent();
-		
+
 		// do your stuff here...
-		
+
 		$response->setContent($html);
 	}
 }
 ```
 
-Notice that you must use the **/** character for regexes on ```$url_pattern```
+Notice that you must use the **/** character for regexes on `$url_pattern`
